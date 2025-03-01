@@ -91,3 +91,60 @@ export async function createInvoice(data: Omit<Invoice, "id" | "createdAt" | "me
   return newInvoice
 }
 
+export const recentSales = [
+  {
+    id: "1",
+    customer: {
+      name: "Olivia Martin",
+      email: "olivia.martin@email.com",
+      avatarUrl: "/avatars/01.png",
+    },
+    amount: 1999.99,
+    currency: "USD",
+    date: "2023-05-20",
+  },
+  {
+    id: "2",
+    customer: {
+      name: "Jackson Lee",
+      email: "jackson.lee@email.com",
+      avatarUrl: "/avatars/02.png",
+    },
+    amount: 39.99,
+    currency: "USD",
+    date: "2023-05-19",
+  },
+  {
+    id: "3",
+    customer: {
+      name: "Isabella Nguyen",
+      email: "isabella.nguyen@email.com",
+      avatarUrl: "/avatars/03.png",
+    },
+    amount: 299.99,
+    currency: "USD",
+    date: "2023-05-18",
+  },
+  {
+    id: "4",
+    customer: {
+      name: "William Chen",
+      email: "william.chen@email.com",
+      avatarUrl: "/avatars/04.png",
+    },
+    amount: 99.99,
+    currency: "USD",
+    date: "2023-05-17",
+  },
+  {
+    id: "5",
+    customer: {
+      name: "Sofia Rodriguez",
+      email: "sofia.rodriguez@email.com",
+      avatarUrl: "/avatars/05.png",
+    },
+    amount: 499.99,
+    currency: "USD",
+    date: "2023-05-16",
+  },
+];

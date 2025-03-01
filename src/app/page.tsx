@@ -14,16 +14,18 @@ export default function Home() {
 
       <div className="container relative z-10 mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="flex flex-col items-center justify-center space-y-12 text-center">
-          <div className="space-y-4">
-            <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm font-medium text-primary backdrop-blur-sm">
-              <Zap className="h-4 w-4 mr-2" />
+          <div className="space-y-4 flex flex-col gap-4 items-center">
+            <div className="inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm font-medium text-primary backdrop-blur-sm gap-2">
+              <Zap className="h-4 w-4" />
               <span>Powered by Jupiter Protocol</span>
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="text-2xl mb-1 font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="block">Welcome to</span>
-              <span className="block text-primary">CypheirPay</span>
+              <span className="block  bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-900">
+                CypheirPay
+              </span>
             </h1>
-            <p className="mx-auto max-w-3xl text-xl text-gray-300 sm:text-2xl">
+            <p className="mx-auto max-w-3xl text-gray-300 sm:text-base">
               Revolutionize your business with our decentralized crypto payment
               gateway. Seamlessly accept, manage, and convert crypto payments.
             </p>
@@ -101,7 +103,7 @@ function FeatureCard({
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary group-hover:bg-primary/30">
         {icon}
       </div>
-      <h3 className="mb-2 text-xl font-semibold bg-clip-text bg-gradient-to-l from-primary via-blue-800 to-blue-500">{title}</h3>
+      <h3 className="mb-2 text-xl font-semibold text-gray-100">{title}</h3>
       <p className="text-gray-300">{description}</p>
     </div>
   );

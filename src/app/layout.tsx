@@ -1,19 +1,23 @@
-import type React from "react"
-import "./globals.css"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { ToastProvider } from "@/components/ui/use-toast"
-import { ThemeProvider } from "@/components/theme-provider"
+import type React from "react";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import { ToastProvider } from "@/components/ui/use-toast";
+import { ThemeProvider } from "@/components/theme-provider";
 // import { SideNav } from "@/components/side-nav"
-import { AuthProvider } from "@/lib/auth"
 
-const inter = Inter({ subsets: ["latin"] })
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  adjustFontFallback: true,
+});
 
 export const metadata: Metadata = {
   title: "CypheirPay | Decentralized Crypto Payment Gateway",
   description:
     "Seamlessly accept and manage crypto payments with automatic USDC conversion powered by Jupiter Protocol",
-  keywords: "crypto payments, blockchain, web3, decentralized finance, DeFi, Solana, Jupiter Protocol",
+  keywords:
+    "crypto payments, blockchain, web3, decentralized finance, DeFi, Solana, Jupiter Protocol",
   authors: [{ name: "CypheirPay Team" }],
   openGraph: {
     type: "website",
@@ -21,7 +25,8 @@ export const metadata: Metadata = {
     url: "https://cypheirpay.com",
     siteName: "CypheirPay",
     title: "CypheirPay - Next-Gen Crypto Payment Solutions",
-    description: "Revolutionize your business with CypheirPay's decentralized payment infrastructure",
+    description:
+      "Revolutionize your business with CypheirPay's decentralized payment infrastructure",
     images: [
       {
         url: "https://cypheirpay.com/og-image.png",
@@ -34,36 +39,42 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "CypheirPay - Decentralized Crypto Payment Gateway",
-    description: "Seamlessly accept and manage crypto payments with automatic USDC conversion",
+    description:
+      "Seamlessly accept and manage crypto payments with automatic USDC conversion",
     images: ["https://cypheirpay.com/twitter-image.png"],
     creator: "@CypheirPay",
   },
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
-}) {
+  children: React.ReactNode;
+  }) {
+  const session = await auth()
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>
-        <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <ToastProvider>
-              <div className="flex h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
-                {/* <SideNav /> */}
-                <main className="flex-1 overflow-y-auto">{children}</main>
-              </div>
-            </ToastProvider>
-          </ThemeProvider>
-        </AuthProvider>
+      <body className={poppins.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ToastProvider>
+            <div className="flex h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
+              <Navbar session={session} />
+              {/* <SideNav /> */}
+              <main className="flex-1 overflow-y-auto pt-8">{children}</main>
+            </div>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
 
+import "./globals.css";
+import { Navbar } from "@/components/navbar";import { auth } from "@/lib/auth";
 
-
-import './globals.css'

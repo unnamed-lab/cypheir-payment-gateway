@@ -7,6 +7,7 @@ import { RecentSales } from "@/components/recent-sales"
 import { TokenDistribution } from "@/components/token-distribution"
 import Link from "next/link"
 import { ArrowUpRight, FileText, Plus, Wallet } from "lucide-react"
+import { recentSales } from "@/lib/data"
 
 export default function DashboardPage() {
   return (
@@ -14,7 +15,9 @@ export default function DashboardPage() {
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Monitor your payment activity and transaction status</p>
+          <p className="text-muted-foreground">
+            Monitor your payment activity and transaction status
+          </p>
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline">
@@ -58,7 +61,9 @@ export default function DashboardPage() {
 
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Payments</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Payments
+            </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -82,7 +87,9 @@ export default function DashboardPage() {
 
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed Payments</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Completed Payments
+            </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -108,7 +115,9 @@ export default function DashboardPage() {
 
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Invoices</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Invoices
+            </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -124,7 +133,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">+7 created this week</p>
+            <p className="text-xs text-muted-foreground">
+              +7 created this week
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -141,7 +152,9 @@ export default function DashboardPage() {
             <Card className="col-span-4 bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Revenue Overview</CardTitle>
-                <CardDescription>Your revenue trends over the past 12 months</CardDescription>
+                <CardDescription>
+                  Your revenue trends over the past 12 months
+                </CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
                 <Overview />
@@ -151,10 +164,12 @@ export default function DashboardPage() {
             <Card className="col-span-3 bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Recent Transactions</CardTitle>
-                <CardDescription>You made 12 transactions this month</CardDescription>
+                <CardDescription>
+                  You made 12 transactions this month
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentSales />
+                <RecentSales sales={recentSales} />
               </CardContent>
             </Card>
           </div>
@@ -163,7 +178,9 @@ export default function DashboardPage() {
             <Card className="col-span-3 bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Token Distribution</CardTitle>
-                <CardDescription>Breakdown of received tokens before conversion</CardDescription>
+                <CardDescription>
+                  Breakdown of received tokens before conversion
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <TokenDistribution />
@@ -176,23 +193,39 @@ export default function DashboardPage() {
                 <CardDescription>Common tasks and shortcuts</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 sm:grid-cols-2">
-                <Button asChild variant="outline" className="h-auto flex-col items-start gap-1 p-4 text-left">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto flex-col items-start gap-1 p-4 text-left"
+                >
                   <Link href="/create-invoice">
                     <FileText className="h-5 w-5" />
                     <div className="font-semibold">Create Invoice</div>
-                    <div className="text-xs text-muted-foreground">Generate a new payment link</div>
+                    <div className="text-xs text-muted-foreground">
+                      Generate a new payment link
+                    </div>
                   </Link>
                 </Button>
 
-                <Button asChild variant="outline" className="h-auto flex-col items-start gap-1 p-4 text-left">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto flex-col items-start gap-1 p-4 text-left"
+                >
                   <Link href="/wallets">
                     <Wallet className="h-5 w-5" />
                     <div className="font-semibold">Manage Wallets</div>
-                    <div className="text-xs text-muted-foreground">Connect or update your wallets</div>
+                    <div className="text-xs text-muted-foreground">
+                      Connect or update your wallets
+                    </div>
                   </Link>
                 </Button>
 
-                <Button asChild variant="outline" className="h-auto flex-col items-start gap-1 p-4 text-left">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto flex-col items-start gap-1 p-4 text-left"
+                >
                   <Link href="/analytics">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -208,11 +241,17 @@ export default function DashboardPage() {
                       <path d="M2 10h20" />
                     </svg>
                     <div className="font-semibold">View Analytics</div>
-                    <div className="text-xs text-muted-foreground">Detailed payment insights</div>
+                    <div className="text-xs text-muted-foreground">
+                      Detailed payment insights
+                    </div>
                   </Link>
                 </Button>
 
-                <Button asChild variant="outline" className="h-auto flex-col items-start gap-1 p-4 text-left">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto flex-col items-start gap-1 p-4 text-left"
+                >
                   <Link href="/settings">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +266,9 @@ export default function DashboardPage() {
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                     </svg>
                     <div className="font-semibold">Payout Settings</div>
-                    <div className="text-xs text-muted-foreground">Configure settlement options</div>
+                    <div className="text-xs text-muted-foreground">
+                      Configure settlement options
+                    </div>
                   </Link>
                 </Button>
               </CardContent>
@@ -239,7 +280,9 @@ export default function DashboardPage() {
           <Card className="bg-card/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Transactions</CardTitle>
-              <CardDescription>View all your transaction history and status</CardDescription>
+              <CardDescription>
+                View all your transaction history and status
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <TransactionTable />
@@ -251,7 +294,9 @@ export default function DashboardPage() {
           <Card className="bg-card/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Invoices</CardTitle>
-              <CardDescription>Manage your invoices and payment links</CardDescription>
+              <CardDescription>
+                Manage your invoices and payment links
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <TransactionTable isInvoice={true} />
@@ -260,6 +305,6 @@ export default function DashboardPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
