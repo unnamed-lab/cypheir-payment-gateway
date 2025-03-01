@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -11,10 +11,16 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, Copy, ExternalLink, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Copy,
+  ExternalLink,
+  Search,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -23,11 +29,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { toast } from "@/components/ui/use-toast"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 // This would typically come from your API
 const data: Transaction[] = [
@@ -76,29 +89,36 @@ const data: Transaction[] = [
     customer: "david@example.com",
     txHash: "7Uvw...x3Yz",
   },
-]
+];
 
 type Transaction = {
-  id: string
-  amount: string
-  currency: string
-  status: "pending" | "completed" | "failed"
-  date: string
-  customer: string
-  txHash: string
-}
+  id: string;
+  amount: string;
+  currency: string;
+  status: "pending" | "completed" | "failed";
+  date: string;
+  customer: string;
+  txHash: string;
+};
 
-export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean }) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = useState({})
+export function TransactionTable({
+  isInvoice = false,
+}: {
+  isInvoice?: boolean;
+}) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   const columns: ColumnDef<Transaction>[] = [
     {
       id: "select",
       header: ({ table }) => (
         <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
@@ -116,7 +136,9 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
     {
       accessorKey: "id",
       header: isInvoice ? "Invoice ID" : "Transaction ID",
-      cell: ({ row }) => <div className="font-medium">{row.getValue("id")}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium">{row.getValue("id")}</div>
+      ),
     },
     {
       accessorKey: "amount",
@@ -130,17 +152,17 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
             Amount
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
       cell: ({ row }) => {
-        const amount = Number.parseFloat(row.getValue("amount"))
-        const currency = row.getValue("currency") as string
+        const amount = Number.parseFloat(row.getValue("amount"));
+        const currency = row.getValue("currency") as string;
 
         return (
           <div className="text-right font-medium">
             {amount} {currency}
           </div>
-        )
+        );
       },
     },
     {
@@ -152,22 +174,28 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const status = row.getValue("status") as string
+        const status = row.getValue("status") as string;
 
         return (
           <Badge
-            variant={status === "completed" ? "default" : status === "pending" ? "outline" : "destructive"}
+            variant={
+              status === "completed"
+                ? "default"
+                : status === "pending"
+                ? "outline"
+                : "destructive"
+            }
             className={
               status === "completed"
                 ? "bg-green-500/20 text-green-500 hover:bg-green-500/30"
                 : status === "pending"
-                  ? "bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30"
-                  : "bg-red-500/20 text-red-500 hover:bg-red-500/30"
+                ? "bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30"
+                : "bg-red-500/20 text-red-500 hover:bg-red-500/30"
             }
           >
             {status}
           </Badge>
-        )
+        );
       },
     },
     {
@@ -182,11 +210,11 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
             Date
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
       cell: ({ row }) => {
-        const date = new Date(row.getValue("date"))
-        return <div>{date.toLocaleDateString()}</div>
+        const date = new Date(row.getValue("date"));
+        return <div>{date.toLocaleDateString()}</div>;
       },
     },
     {
@@ -198,9 +226,10 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
       accessorKey: "txHash",
       header: "Transaction Hash",
       cell: ({ row }) => {
-        const txHash = row.getValue("txHash") as string
+        const txHash = row.getValue("txHash") as string;
 
-        if (!txHash) return <div className="text-muted-foreground">Pending</div>
+        if (!txHash)
+          return <div className="text-muted-foreground">Pending</div>;
 
         return (
           <div className="flex items-center space-x-2">
@@ -210,11 +239,8 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
               size="icon"
               className="h-6 w-6 hover:bg-purple-500/10 hover:text-purple-500"
               onClick={() => {
-                navigator.clipboard.writeText(txHash)
-                toast({
-                  title: "Copied!",
-                  description: "Transaction hash copied to clipboard",
-                })
+                navigator.clipboard.writeText(txHash);
+                toast("Copied! \nTransaction hash copied to clipboard");
               }}
             >
               <Copy className="h-3 w-3" />
@@ -225,41 +251,56 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
               className="h-6 w-6 hover:bg-purple-500/10 hover:text-purple-500"
               asChild
             >
-              <a href={`https://solscan.io/tx/${txHash}`} target="_blank" rel="noopener noreferrer">
+              <a
+                href={`https://solscan.io/tx/${txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <ExternalLink className="h-3 w-3" />
               </a>
             </Button>
           </div>
-        )
+        );
       },
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const transaction = row.original
+        const transaction = row.original;
 
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-purple-500/10 hover:text-purple-500">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 hover:bg-purple-500/10 hover:text-purple-500"
+              >
                 <span className="sr-only">Open menu</span>
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(transaction.id)}>Copy ID</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(transaction.id)}
+              >
+                Copy ID
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>View details</DropdownMenuItem>
-              {isInvoice && transaction.status === "pending" && <DropdownMenuItem>Send reminder</DropdownMenuItem>}
-              {isInvoice && <DropdownMenuItem>Download invoice</DropdownMenuItem>}
+              {isInvoice && transaction.status === "pending" && (
+                <DropdownMenuItem>Send reminder</DropdownMenuItem>
+              )}
+              {isInvoice && (
+                <DropdownMenuItem>Download invoice</DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const table = useReactTable({
     data,
@@ -276,7 +317,7 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
       columnFilters,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -286,7 +327,9 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
           <Input
             placeholder={`Filter ${isInvoice ? "invoices" : "transactions"}...`}
             value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("id")?.setFilterValue(event.target.value)}
+            onChange={(event) =>
+              table.getColumn("id")?.setFilterValue(event.target.value)
+            }
             className="pl-8"
           />
         </div>
@@ -306,11 +349,13 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -323,9 +368,14 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -333,15 +383,26 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -351,8 +412,8 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="space-x-2">
           <Button
@@ -363,12 +424,16 @@ export function TransactionTable({ isInvoice = false }: { isInvoice?: boolean })
           >
             Previous
           </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
             Next
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

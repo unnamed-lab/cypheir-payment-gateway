@@ -1,49 +1,57 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
-export function RecentSales() {
+interface Sale {
+  id: string;
+  customer: {
+    name: string;
+    email: string;
+    avatarUrl?: string;
+  };
+  amount: number;
+  currency: string;
+  date: string;
+}
+
+interface RecentSalesProps {
+  sales: Sale[];
+}
+
+export function RecentSales({ sales }: RecentSalesProps) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Avatar className="h-10 w-10 border border-purple-500/20">
-          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Avatar" />
-          <AvatarFallback className="bg-purple-500/10 text-purple-500">JL</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-medium leading-none">Jackson Lee</p>
-          <p className="text-xs text-muted-foreground">jackson.lee@example.com</p>
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Sales</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-8">
+          {sales.map((sale) => (
+            <div key={sale.id} className="flex items-center">
+              <Avatar className="h-9 w-9">
+                <AvatarImage
+                  src={sale.customer.avatarUrl}
+                  alt={sale.customer.name}
+                />
+                <AvatarFallback>
+                  {sale.customer.name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="ml-4 space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  {sale.customer.name}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {sale.customer.email}
+                </p>
+              </div>
+              <div className="ml-auto font-medium">
+                {formatCurrency(sale.amount, sale.currency)}
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="font-medium text-green-500">+$250.00</div>
-      </div>
-      <div className="flex items-center gap-4">
-        <Avatar className="h-10 w-10 border border-purple-500/20">
-          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Avatar" />
-          <AvatarFallback className="bg-purple-500/10 text-purple-500">SD</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-medium leading-none">Sofia Davis</p>
-          <p className="text-xs text-muted-foreground">sofia.davis@example.com</p>
-        </div>
-        <div className="font-medium text-green-500">+$150.00</div>
-      </div>
-      <div className="flex items-center gap-4">
-        <Avatar className="h-10 w-10 border border-purple-500/20">
-          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Avatar" />
-          <AvatarFallback className="bg-purple-500/10 text-purple-500">MC</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-medium leading-none">Michael Chen</p>
-          <p className="text-xs text-muted-foreground">michael.chen@example.com</p>
-        </div>
-        <div className="font-medium text-green-500">+$350.00</div>
-      </div>
-      <div className="flex items-center gap-4">
-        <Avatar className="h-10 w-10 border border-purple-500/20">
-          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Avatar" />
-          <AvatarFallback className="bg-purple-500/10 text-purple-500">AR</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-medium leading-none">Aisha Rodriguez</p>
-          <p className="text-xs text-\
-
-\
-
+      </CardContent>
+    </Card>
+  );
+}

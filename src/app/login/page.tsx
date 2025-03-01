@@ -1,16 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { toast } from "@/components/ui/use-toast"
-import { useAuth } from "@/lib/auth" // We'll create this hook later
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+import { useAuth } from "@/lib/auth"; // We'll create this hook later
 
 const formSchema = z.object({
   email: z.string().email({
@@ -19,12 +32,12 @@ const formSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters long.",
   }),
-})
+});
 
 export default function LoginPage() {
-  const router = useRouter()
-  const { login } = useAuth() // We'll implement this hook later
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const { login } = useAuth(); // We'll implement this hook later
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,26 +45,21 @@ export default function LoginPage() {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await login(values.email, values.password)
-      toast({
-        title: "Logged in successfully",
-        description: "Welcome back!",
-      })
-      router.push("/dashboard")
+      await login(values.email, values.password);
+      toast("Logged in successfully \nWelcome back!");
+      router.push("/dashboard");
     } catch (error) {
-      console.error(error)
-      toast({
-        title: "Error",
-        description: "Failed to log in. Please check your credentials and try again.",
-        variant: "destructive",
-      })
+      console.error(error);
+      toast(
+        "Error \nFailed to log in. Please check your credentials and try again."
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -60,7 +68,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Login to CypheirPay</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+          <CardDescription>
+            Enter your credentials to access your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -85,7 +95,11 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -99,6 +113,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-
