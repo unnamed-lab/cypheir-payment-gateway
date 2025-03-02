@@ -1,34 +1,44 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { PaymentForm } from "@/components/payment-form"
-import { InvoiceShareSlip } from "@/components/invoice-share-slip"
-import prisma from "@/lib/prisma"
-import { notFound } from "next/navigation"
-import { CalendarDays, Clock, Copy, Mail, Share2 } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { PaymentForm } from "@/components/payment-form";
+import { InvoiceShareSlip } from "@/components/invoice-share-slip";
+import { prisma } from "@/db";
+import { notFound } from "next/navigation";
+import { CalendarDays, Clock, Copy, Mail, Share2 } from "lucide-react";
+import Link from "next/link";
 
 interface InvoicePageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 export default async function InvoicePage({ params }: InvoicePageProps) {
   const invoice = await prisma.invoice.findUnique({
     where: { id: params.id },
     include: { user: true },
-  })
+  });
 
   if (!invoice) {
-    notFound()
+    notFound();
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl">
       <div className="mb-8 flex items-center justify-between">
-        <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link
+          href="/dashboard"
+          className="text-sm text-muted-foreground hover:text-foreground"
+        >
           ← Back to Dashboard
         </Link>
         <div className="flex gap-2">
@@ -90,7 +100,9 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
             <div className="space-y-4">
               <div className="grid gap-2">
                 <div className="text-sm font-medium">Description</div>
-                <div className="text-sm text-muted-foreground">{invoice.description || "No description provided"}</div>
+                <div className="text-sm text-muted-foreground">
+                  {invoice.description || "No description provided"}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -131,8 +143,8 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 text-center text-sm text-muted-foreground">
           <p>
-            Payments are processed securely through our platform. All transactions are converted to USDC for the
-            merchant.
+            Payments are processed securely through our platform. All
+            transactions are converted to USDC for the merchant.
           </p>
           <p>Having trouble? Contact support at support@example.com</p>
         </CardFooter>
@@ -142,6 +154,5 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
         <InvoiceShareSlip invoice={invoice} />
       </div>
     </div>
-  )
+  );
 }
-
