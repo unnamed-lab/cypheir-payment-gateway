@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server"
-import { PublicKey, Connection } from "@solana/web3.js"
+import {
+  PublicKey,
+  // Connection
+} from "@solana/web3.js"
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 // Mock RPC connection - replace with actual RPC endpoint in production
-const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed")
+// const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed")
 
 export async function POST(request: Request) {
   try {

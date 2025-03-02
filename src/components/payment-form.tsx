@@ -1,46 +1,46 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { toast } from "@/components/ui/use-toast"
-import { Loader2 } from "lucide-react"
-import Image from "next/image"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 interface Invoice {
-  id: string
-  amount: string
-  currency: string
-  merchantPublicKey: string
+  id: string;
+  amount: string;
+  currency: string;
+  merchantPublicKey: string;
 }
 
 interface PaymentFormProps {
-  invoice: Invoice
+  invoice: Invoice;
 }
 
 export function PaymentForm({ invoice }: PaymentFormProps) {
-  const [selectedToken, setSelectedToken] = useState("SOL")
-  const [walletAddress, setWalletAddress] = useState("")
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [selectedToken, setSelectedToken] = useState("SOL");
+  const [walletAddress, setWalletAddress] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!walletAddress) {
       toast({
         title: "Error",
         description: "Please enter your wallet address",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setIsProcessing(true)
+    setIsProcessing(true);
 
     try {
       // Get Jupiter swap quote and transaction
@@ -60,13 +60,13 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
           userPublicKey: walletAddress,
           merchantPublicKey: invoice.merchantPublicKey,
         }),
-      })
+      });
 
       if (!swapResponse.ok) {
-        throw new Error("Failed to get Jupiter swap quote")
+        throw new Error("Failed to get Jupiter swap quote");
       }
 
-      const swapData = await swapResponse.json()
+      const swapData = await swapResponse.json();
 
       // In a real app, you would call your API here to process the payment
       const response = await fetch(`/api/payments`, {
@@ -82,37 +82,42 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
           inputAmount: swapData.inputAmount,
           outputAmount: swapData.outputAmount,
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Payment failed")
+        throw new Error("Payment failed");
       }
 
-      const data = await response.json()
+      // const data = await response.json()
 
       toast({
         title: "Payment initiated!",
         description: "Please confirm the transaction in your wallet.",
-      })
+      });
 
       // Here you would typically wait for the blockchain confirmation
       // and then update the UI accordingly
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
         title: "Payment failed",
-        description: "There was an error processing your payment. Please try again.",
+        description:
+          "There was an error processing your payment. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
-        <RadioGroup value={selectedToken} onValueChange={setSelectedToken} className="grid grid-cols-2 gap-4">
+        <RadioGroup
+          value={selectedToken}
+          onValueChange={setSelectedToken}
+          className="grid grid-cols-2 gap-4"
+        >
           <div className="relative">
             <RadioGroupItem value="SOL" id="SOL" className="peer sr-only" />
             <Label
@@ -121,11 +126,18 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
             >
               <div className="flex items-center gap-2">
                 <div className="h-6 w-6 overflow-hidden rounded-full bg-[#00FFA3]/10">
-                  <Image src="/placeholder.svg?height=24&width=24" alt="SOL" width={24} height={24} />
+                  <Image
+                    src="/placeholder.svg?height=24&width=24"
+                    alt="SOL"
+                    width={24}
+                    height={24}
+                  />
                 </div>
                 <div className="font-medium">SOL</div>
               </div>
-              <div className="text-sm text-muted-foreground">≈ {(Number(invoice.amount) / 150).toFixed(4)} SOL</div>
+              <div className="text-sm text-muted-foreground">
+                ≈ {(Number(invoice.amount) / 150).toFixed(4)} SOL
+              </div>
             </Label>
           </div>
 
@@ -137,11 +149,18 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
             >
               <div className="flex items-center gap-2">
                 <div className="h-6 w-6 overflow-hidden rounded-full bg-[#2775CA]/10">
-                  <Image src="/placeholder.svg?height=24&width=24" alt="USDC" width={24} height={24} />
+                  <Image
+                    src="/placeholder.svg?height=24&width=24"
+                    alt="USDC"
+                    width={24}
+                    height={24}
+                  />
                 </div>
                 <div className="font-medium">USDC</div>
               </div>
-              <div className="text-sm text-muted-foreground">{invoice.amount} USDC</div>
+              <div className="text-sm text-muted-foreground">
+                {invoice.amount} USDC
+              </div>
             </Label>
           </div>
         </RadioGroup>
@@ -201,11 +220,10 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
         </Button>
 
         <p className="text-xs text-center text-muted-foreground">
-          By clicking "Pay Now", you agree to our Terms of Service and Privacy Policy. All payments will be converted to
-          USDC for the merchant using Jupiter.
+          {`By clicking "Pay Now", you agree to our Terms of Service and Privacy Policy. All payments will be converted to
+          USDC for the merchant using Jupiter.`}
         </p>
       </div>
     </form>
-  )
+  );
 }
-

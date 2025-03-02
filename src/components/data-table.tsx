@@ -138,6 +138,3 @@ export function DataTable<T>({ columns, data }: { columns: ColumnDef<T>[]; data:
     </div>
   )
 }
-\
-"
-
