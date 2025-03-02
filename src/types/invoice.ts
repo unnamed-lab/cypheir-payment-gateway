@@ -26,7 +26,7 @@ export interface Transaction {
 export interface Invoice {
   id: string;
   title: string;
-  description?: string;
+  description?: string | null;
   amount: number;
   currency: string;
   status: string;
