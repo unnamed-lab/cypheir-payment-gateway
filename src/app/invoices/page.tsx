@@ -6,7 +6,7 @@ import { Plus } from "lucide-react"
 
 export default function InvoicesPage() {
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-6 lg:p-16">
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Invoices</h1>

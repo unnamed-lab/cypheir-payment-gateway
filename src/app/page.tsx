@@ -21,8 +21,8 @@ export default function Home() {
             </div>
             <h1 className="text-2xl mb-1 font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="block">Welcome to</span>
-              <span className="block  bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-900">
-                CypheirPay
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-900">
+                Cypheir<span className="text-white">Pay.</span>
               </span>
             </h1>
             <p className="mx-auto max-w-3xl text-gray-300 sm:text-base">

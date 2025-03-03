@@ -1,43 +1,151 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useSession } from "next-auth/react";
+
+const profileFormSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters.").max(50),
+  email: z.string().email("Invalid email address."),
+  dateOfBirth: z.string().optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function SettingsPage() {
-  return (
-    <div className="p-6 lg:p-8">
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground">Manage your account settings and preferences</p>
-        </div>
-      </div>
+  const { data: session, update } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
-      <div className="mt-6 space-y-6">
-        <Card className="bg-card/50 backdrop-blur-sm">
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: session?.user?.name || "",
+      email: session?.user?.email || "",
+      dateOfBirth: ""
+        // session?.user?.dateOfBirth
+        // ? new Date(session.user.dateOfBirth).toISOString().split("T")[0]
+        // : "",
+    },
+  });
+
+  async function onSubmit(data: ProfileFormValues) {
+    setIsLoading(true);
+    try {
+      // Here you would typically send a request to your API to update the user's profile
+      // For this example, we'll just update the session
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          ...data,
+        },
+      });
+      toast("Profile updated", {
+        description: "Your profile has been successfully updated.",
+      });
+    } catch (error) {
+      toast("Error", {
+        description: "Failed to update profile. Please try again.",
+      });
+      console.error({ error });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-6">Settings</h1>
+      <div className="space-y-6">
+        <Card>
           <CardHeader>
-            <CardTitle>Account Information</CardTitle>
-            <CardDescription>Update your account details</CardDescription>
+            <CardTitle>Profile</CardTitle>
+            <CardDescription>
+              Manage your account settings and preferences.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Your Name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" />
-            </div>
-            <Button>Save Changes</Button>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date of Birth</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Updating..." : "Update Profile"}
+                </Button>
+              </form>
+            </Form>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur-sm">
+        <Card>
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
-            <CardDescription>Manage your notification preferences</CardDescription>
+            <CardDescription>
+              Manage your notification preferences.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
@@ -52,10 +160,12 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur-sm">
+        <Card>
           <CardHeader>
             <CardTitle>Security</CardTitle>
-            <CardDescription>Manage your account security settings</CardDescription>
+            <CardDescription>
+              Manage your account security settings.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -75,6 +185,5 @@ export default function SettingsPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-

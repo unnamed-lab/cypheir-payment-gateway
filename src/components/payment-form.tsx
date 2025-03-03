@@ -8,19 +8,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-
-interface Invoice {
-  id: string;
-  amount: string;
-  currency: string;
-  merchantPublicKey: string;
-}
+import { Invoice, Milestone } from "@prisma/client";
 
 interface PaymentFormProps {
   invoice: Invoice;
+  milestone?: Milestone[];
 }
 
 export function PaymentForm({ invoice }: PaymentFormProps) {
@@ -32,11 +27,7 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
     e.preventDefault();
 
     if (!walletAddress) {
-      toast({
-        title: "Error",
-        description: "Please enter your wallet address",
-        variant: "destructive",
-      });
+      toast("Error \nPlease enter your wallet address");
       return;
     }
 
@@ -55,7 +46,7 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
               ? "So11111111111111111111111111111111111111112"
               : "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
           outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC
-          amount: Number.parseFloat(invoice.amount) * 1000000, // Convert to USDC decimals
+          amount: Number.parseFloat(invoice.amount.toString()) * 1000000, // Convert to USDC decimals
           slippage: 50, // 0.5%
           userPublicKey: walletAddress,
           merchantPublicKey: invoice.merchantPublicKey,
@@ -90,8 +81,7 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
 
       // const data = await response.json()
 
-      toast({
-        title: "Payment initiated!",
+      toast("Payment initiated!", {
         description: "Please confirm the transaction in your wallet.",
       });
 
@@ -99,11 +89,9 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
       // and then update the UI accordingly
     } catch (error) {
       console.error(error);
-      toast({
-        title: "Payment failed",
+      toast("Payment failed", {
         description:
           "There was an error processing your payment. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setIsProcessing(false);

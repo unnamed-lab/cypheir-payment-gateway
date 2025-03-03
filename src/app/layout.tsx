@@ -13,6 +13,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pay.cypheir.xyz"),
   title: "CypheirPay | Decentralized Crypto Payment Gateway",
   description:
     "Seamlessly accept and manage crypto payments with automatic USDC conversion powered by Jupiter Protocol",
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://cypheirpay.com",
+    url: "https://pay.cypheir.xyz",
     siteName: "CypheirPay",
     title: "CypheirPay - Next-Gen Crypto Payment Solutions",
     description:
       "Revolutionize your business with CypheirPay's decentralized payment infrastructure",
     images: [
       {
-        url: "https://cypheirpay.com/og-image.png",
+        url: "https://pay.cypheir.xyz/og-image.png",
         width: 1200,
         height: 630,
         alt: "CypheirPay - Decentralized Crypto Payment Gateway",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     title: "CypheirPay - Decentralized Crypto Payment Gateway",
     description:
       "Seamlessly accept and manage crypto payments with automatic USDC conversion",
-    images: ["https://cypheirpay.com/twitter-image.png"],
+    images: ["https://pay.cypheir.xyz/twitter-image.png"],
     creator: "@CypheirPay",
   },
   generator: "v0.dev",
@@ -51,30 +52,33 @@ export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-  }) {
-  const session = await auth()
+}) {
+  const session = await auth();
   return (
     <html lang="en" className="dark">
       <body className={poppins.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ToastProvider>
-            <div className="flex h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
-              <Navbar session={session} />
-              {/* <SideNav /> */}
-              <main className="flex-1 overflow-y-auto pt-8">{children}</main>
-            </div>
-          </ToastProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ToastProvider>
+              <div className="flex h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
+                <Navbar session={session} />
+                {/* <SideNav /> */}
+                <main className="flex-1 overflow-y-auto pt-8">{children}</main>
+              </div>
+            </ToastProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );
 }
 
 import "./globals.css";
-import { Navbar } from "@/components/navbar";import { auth } from "@/lib/auth";
-
+import { Navbar } from "@/components/navbar";
+import { auth } from "@/lib/auth";
+import { SessionProvider } from "next-auth/react";

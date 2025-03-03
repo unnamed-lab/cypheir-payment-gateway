@@ -31,9 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { FileText, Loader2 } from "lucide-react";
-import { useAuth } from "@/lib/auth";
+import { FileText, Loader2 } from "lucide-react"; 
 import { toast } from "sonner";
+import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -55,7 +55,8 @@ const formSchema = z.object({
 
 export default function CreateInvoicePage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -72,10 +73,10 @@ export default function CreateInvoicePage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // if (!user) {
-    //   toast("You must be logged in to create an invoice.");
-    //   return;
-    // }
+    if (!user) {
+      toast("You must be logged in to create an invoice.");
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -88,7 +89,7 @@ export default function CreateInvoicePage() {
         body: JSON.stringify({
           ...values,
           amount: Number.parseFloat(values.amount),
-          userId: user?.id || "1",
+          userId: user?.id,
         }),
       });
 

@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/db";
+import { auth } from "@/lib/auth";
 
 export async function POST(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   try {
     const body = await request.json();
 
@@ -15,7 +22,7 @@ export async function POST(request: Request) {
         recipientEmail: body.recipientEmail,
         dueDate: body.dueDate ? new Date(body.dueDate) : null,
         merchantPublicKey: body.merchantPublicKey,
-        userId: body.userId,
+        userId: session?.user?.id as string,
       },
     });
 

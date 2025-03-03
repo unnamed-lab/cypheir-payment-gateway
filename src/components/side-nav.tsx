@@ -1,26 +1,39 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { BarChart3, CreditCard, FileText, Home, LayoutDashboard, LogOut, Settings, Users, Wallet } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Logo } from "@/components/logo"
-import { useAuth } from "@/lib/auth" // We'll create this hook later
+import type React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  BarChart3,
+  CreditCard,
+  FileText,
+  Home,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  Users,
+  Wallet,
+  DollarSign,
+  Milestone,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Logo } from "@/components/logo";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 interface NavItem {
-  title: string
-  href: string
-  icon: React.ReactNode
-  requiresAuth: boolean
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  requiresAuth: boolean;
 }
 
 export function SideNav() {
-  const pathname = usePathname()
-  const { user, logout } = useAuth() // We'll implement this hook later
+  const pathname = usePathname();
+  const { data } = useSession();
+  const user = data?.user;
 
   const routes: NavItem[] = [
     {
@@ -42,9 +55,21 @@ export function SideNav() {
       requiresAuth: true,
     },
     {
+      title: "Milestone Invoices",
+      href: "/create-milestone-invoice",
+      icon: <Milestone className="h-5 w-5" />,
+      requiresAuth: true,
+    },
+    {
       title: "Transactions",
       href: "/transactions",
       icon: <CreditCard className="h-5 w-5" />,
+      requiresAuth: true,
+    },
+    {
+      title: "Recent Sales",
+      href: "/recent-sales",
+      icon: <DollarSign className="h-5 w-5" />,
       requiresAuth: true,
     },
     {
@@ -71,7 +96,7 @@ export function SideNav() {
       icon: <Settings className="h-5 w-5" />,
       requiresAuth: true,
     },
-  ]
+  ];
 
   return (
     <div className="hidden border-r bg-card/40 backdrop-blur-sm md:block w-64 flex-shrink-0">
@@ -92,7 +117,8 @@ export function SideNav() {
                     variant={pathname === route.href ? "default" : "ghost"}
                     className={cn(
                       "justify-start gap-2",
-                      pathname === route.href && "bg-primary text-primary-foreground hover:bg-primary/90",
+                      pathname === route.href &&
+                        "bg-primary text-primary-foreground hover:bg-primary/90"
                     )}
                     asChild
                   >
@@ -101,18 +127,26 @@ export function SideNav() {
                       {route.title}
                     </Link>
                   </Button>
-                ),
+                )
             )}
           </nav>
         </ScrollArea>
         <div className="mt-auto border-t p-4">
           {user ? (
-            <Button variant="outline" className="w-full justify-start gap-2" onClick={logout}>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={() => signOut()}
+            >
               <LogOut className="h-5 w-5" />
               Logout
             </Button>
           ) : (
-            <Button variant="outline" className="w-full justify-start gap-2" asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2"
+              asChild
+            >
               <Link href="/login">
                 <LogOut className="h-5 w-5" />
                 Login
@@ -122,6 +156,5 @@ export function SideNav() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

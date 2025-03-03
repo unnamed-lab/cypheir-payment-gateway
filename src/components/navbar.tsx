@@ -32,7 +32,7 @@ export function Navbar({ session }: NavbarProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-[68px] bg-black/60 backdrop-blur-xs border-b border-grey-200 z-40">
+    <header className="fixed top-0 left-0 right-0 h-[60px] bg-black/60 backdrop-blur-xs border-b border-grey-200 z-40">
       <Dialog>
         <div className="h-full flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
@@ -51,28 +51,27 @@ export function Navbar({ session }: NavbarProps) {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="#"
-              className="text-body-regular text-grey-600 hover:text-grey-900"
+              className="text-xs text-grey-600 hover:text-grey-900"
             >
               Home
             </Link>
             <Link
               href="#"
-              className="text-body-regular text-grey-600 hover:text-grey-900"
+              className="text-xs text-grey-600 hover:text-grey-900"
             >
               About
             </Link>
             {isAuth ? (
               <Button
                 variant="ghost"
-                asChild
-                className="text-white bg-primary"
+                className="text-white bg-primary text-xs"
                 type="submit"
                 onClick={() => signOut()}
               >
                 Sign Out
               </Button>
             ) : (
-              <Button variant="ghost" asChild className="text-white bg-primary">
+              <Button variant="ghost" asChild className="text-white bg-primary text-xs">
                 <DialogTrigger>Sign In</DialogTrigger>
               </Button>
             )}
