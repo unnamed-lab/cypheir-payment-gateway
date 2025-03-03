@@ -1,20 +1,14 @@
-"use client"
+"use client";
 
 import { QRCodeSVG } from "qrcode.react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { Invoice, Milestone } from "@prisma/client";
 
 interface InvoiceShareSlipProps {
-  invoice: {
-    id: string;
-    title: string;
-    amount: number;
-    currency: string;
-    status: string;
-    milestones?: Array<{ amount: number }>;
-  };
+  invoice: Invoice & { milestones: Milestone[] };
 }
 
 export function InvoiceShareSlip({ invoice }: InvoiceShareSlipProps) {
@@ -22,7 +16,8 @@ export function InvoiceShareSlip({ invoice }: InvoiceShareSlipProps) {
     typeof window !== "undefined" ? window.location.origin : ""
   }/invoice/${invoice.id}`;
 
-  const totalAmount = invoice.milestones
+  const hasMilestones = invoice.milestones.length > 0;
+  const totalAmount = hasMilestones
     ? invoice.milestones.reduce((sum, milestone) => sum + milestone.amount, 0)
     : invoice.amount;
 

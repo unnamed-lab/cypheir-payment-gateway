@@ -13,7 +13,7 @@ import { PaymentForm } from "@/components/payment-form";
 import { InvoiceShareSlip } from "@/components/invoice-share-slip";
 import { prisma } from "@/db";
 import { notFound } from "next/navigation";
-import { CalendarDays, Clock, Copy, Mail, Share2 } from "lucide-react";
+import { CalendarDays, Clock, Mail, Share2 } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 
@@ -44,15 +44,12 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
       <div className="mb-8 flex items-center justify-between">
         <Link
           href="/dashboard"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-xs lg:text-sm text-muted-foreground hover:text-foreground"
         >
           ← Back to Dashboard
         </Link>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="gap-1">
-            <Copy className="h-4 w-4" /> Copy Link
-          </Button>
-          <Button variant="outline" size="sm" className="gap-1">
+        <div className="flex">
+          <Button variant="outline" asChild size="sm" className="gap-1">
             <Link href="#share-slip">
               <Share2 className="h-4 w-4" /> Share
             </Link>
