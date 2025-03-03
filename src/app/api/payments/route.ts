@@ -23,7 +23,12 @@ export async function POST(request: Request) {
 
     // Set the fee payer to the customer's wallet
     transaction.message.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-    transaction.sign([new PublicKey(body.walletAddress)])
+    // Replace with actual Signer object in production
+    const signer = {
+      publicKey: new PublicKey(body.walletAddress),
+      secretKey: new Uint8Array([]) // Replace with actual secret key
+    }
+    transaction.sign([signer])
 
     const signature = await connection.sendRawTransaction(transaction.serialize())
 

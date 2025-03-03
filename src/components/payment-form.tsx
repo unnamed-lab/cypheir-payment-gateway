@@ -15,10 +15,10 @@ import { Invoice, Milestone } from "@prisma/client";
 
 interface PaymentFormProps {
   invoice: Invoice;
-  milestone?: Milestone[];
+  milestone?: Milestone;
 }
 
-export function PaymentForm({ invoice }: PaymentFormProps) {
+export function PaymentForm({ invoice, milestone }: PaymentFormProps) {
   const [selectedToken, setSelectedToken] = useState("SOL");
   const [walletAddress, setWalletAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -26,6 +26,8 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log({milestone})
+    console.log("Processing payment...");
     if (!walletAddress) {
       toast("Error \nPlease enter your wallet address");
       return;
@@ -112,7 +114,7 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
               htmlFor="SOL"
               className="flex items-center justify-between rounded-md border-2 border-muted bg-card/50 backdrop-blur-sm p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col lg:flex-row items-center gap-2">
                 <div className="h-6 w-6 overflow-hidden rounded-full bg-[#00FFA3]/10">
                   <Image
                     src="/placeholder.svg?height=24&width=24"
@@ -135,7 +137,7 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
               htmlFor="USDC"
               className="flex items-center justify-between rounded-md border-2 border-muted bg-card/50 backdrop-blur-sm p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col lg:flex-row items-center gap-2">
                 <div className="h-6 w-6 overflow-hidden rounded-full bg-[#2775CA]/10">
                   <Image
                     src="/placeholder.svg?height=24&width=24"

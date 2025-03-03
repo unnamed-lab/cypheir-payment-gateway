@@ -53,7 +53,9 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
             <Copy className="h-4 w-4" /> Copy Link
           </Button>
           <Button variant="outline" size="sm" className="gap-1">
-            <Share2 className="h-4 w-4" /> Share
+            <Link href="#share-slip">
+              <Share2 className="h-4 w-4" /> Share
+            </Link>
           </Button>
         </div>
       </div>
@@ -115,17 +117,17 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
+                <div className="grid lg:grid-cols-2 gap-4">
+                  <div className="grid gap-2 order-2 lg:order-1">
                     <div className="text-sm font-medium">Total Amount Due</div>
                     <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
                       {formatCurrency(totalAmount, invoice.currency)}
                     </div>
                   </div>
 
-                  <div className="grid gap-2">
+                  <div className="grid gap-2 order-1 lg:order-2">
                     <div className="text-sm font-medium">Recipient</div>
-                    <div className="flex items-center text-sm">
+                    <div className="flex items-center text-sm truncate">
                       <Mail className="mr-1 h-3 w-3" />
                       {invoice.recipientEmail}
                     </div>
@@ -209,7 +211,7 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
           </CardFooter>
         </Card>
 
-        <div className="mt-8">
+        <div className="mt-8" id="share-slip">
           <InvoiceShareSlip invoice={invoice} />
         </div>
       </div>
