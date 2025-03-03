@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Coins, FileText, Wallet, Zap } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
-export default function Home() {
+async function getStats() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stats`, {
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch stats");
+  }
+  return response.json();
+}
+export default async function Home() {
+  const stats = await getStats();
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-black to-gray-900">
       {/* Animated background */}
@@ -65,7 +76,7 @@ export default function Home() {
         </div>
 
         {/* Stats section */}
-        <div className="mt-24 rounded-2xl border border-primary/20 bg-primary/5 p-8 backdrop-blur-sm">
+        {/* <div className="mt-24 rounded-2xl border border-primary/20 bg-primary/5 p-8 backdrop-blur-sm">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <StatCard
               title="Total Volume"
@@ -80,6 +91,27 @@ export default function Home() {
             <StatCard
               title="Avg. Savings"
               value="3.2%"
+              description="On transaction fees"
+            />
+          </div>
+        </div> */}
+
+        {/* Stats section */}
+        <div className="mt-24 rounded-2xl border border-primary/20 bg-primary/5 p-8 backdrop-blur-sm">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <StatCard
+              title="Total Volume"
+              value={`$${formatNumber(stats.totalVolume)}`}
+              description="Processed securely"
+            />
+            <StatCard
+              title="Merchants"
+              value={`${formatNumber(stats.merchantCount)}`}
+              description="Trust our platform"
+            />
+            <StatCard
+              title="Avg. Savings"
+              value={`${stats.avgSavings}%`}
               description="On transaction fees"
             />
           </div>
