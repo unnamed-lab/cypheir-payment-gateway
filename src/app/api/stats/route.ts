@@ -24,7 +24,7 @@ export async function GET() {
 
     // Calculate average savings (assuming 5% is the standard fee and our fee is 1.8%)
     const standardFee = 0.05;
-    const ourFee = 0.0018;
+    const ourFee = 0.022;
     const avgSavings = ((standardFee - ourFee) / standardFee) * 100;
 
     return NextResponse.json({
