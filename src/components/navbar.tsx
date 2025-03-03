@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "./ui/input";
 import { Session } from "next-auth";
+import { SidebarTrigger } from "./ui/sidebar";
 
 interface NavbarProps {
   session: Session | null;
@@ -36,9 +37,11 @@ export function Navbar({ session }: NavbarProps) {
       <Dialog>
         <div className="h-full flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="flex">
-              <Menu className="h-5 w-5" />
-            </Button>
+            <SidebarTrigger>
+              <Button variant="ghost" size="icon" className="flex">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SidebarTrigger>
             <Link href="/" className="flex items-center gap-1">
               <span className="text-lg font-extrabold text-grey-900 inline">
                 <span className="text-primary">Cypheir</span>
@@ -71,7 +74,11 @@ export function Navbar({ session }: NavbarProps) {
                 Sign Out
               </Button>
             ) : (
-              <Button variant="ghost" asChild className="text-white bg-primary text-xs">
+              <Button
+                variant="ghost"
+                asChild
+                className="text-white bg-primary text-xs"
+              >
                 <DialogTrigger>Sign In</DialogTrigger>
               </Button>
             )}

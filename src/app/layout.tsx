@@ -4,7 +4,11 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { ToastProvider } from "@/components/ui/use-toast";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { SideNav } from "@/components/side-nav"
+import { SideNav } from "@/components/side-nav";
+import { Navbar } from "@/components/navbar";
+import { auth } from "@/lib/auth";
+import { SessionProvider } from "next-auth/react";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -64,21 +68,20 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ToastProvider>
-              <div className="flex h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
-                <Navbar session={session} />
-                {/* <SideNav /> */}
-                <main className="flex-1 overflow-y-auto pt-8">{children}</main>
-              </div>
-            </ToastProvider>
+            <SidebarProvider defaultOpen={false}>
+              <ToastProvider>
+                <div className="flex flex-1 h-screen overflow-hidden bg-gradient-to-br from-background to-background/90">
+                  <Navbar session={session} />
+                  <SideNav />
+                  <main className="flex-1 overflow-y-auto pt-8">
+                    {children}
+                  </main>
+                </div>
+              </ToastProvider>
+            </SidebarProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>
     </html>
   );
 }
-
-import "./globals.css";
-import { Navbar } from "@/components/navbar";
-import { auth } from "@/lib/auth";
-import { SessionProvider } from "next-auth/react";

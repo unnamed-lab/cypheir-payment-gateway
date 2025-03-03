@@ -4,12 +4,16 @@ import type React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  // signOut,
+  useSession,
+} from "next-auth/react";
+import {
   BarChart3,
   CreditCard,
   FileText,
   Home,
   LayoutDashboard,
-  LogOut,
+  // LogOut,
   Settings,
   Users,
   Wallet,
@@ -17,11 +21,15 @@ import {
   Milestone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Logo } from "@/components/logo";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import {
+  Sidebar,
+  SidebarContent,
+  // SidebarFooter,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
 
 interface NavItem {
   title: string;
@@ -32,8 +40,7 @@ interface NavItem {
 
 export function SideNav() {
   const pathname = usePathname();
-  const { data } = useSession();
-  const user = data?.user;
+  const { data: session } = useSession();
 
   const routes: NavItem[] = [
     {
@@ -99,62 +106,57 @@ export function SideNav() {
   ];
 
   return (
-    <div className="hidden border-r bg-card/40 backdrop-blur-sm md:block w-64 flex-shrink-0">
-      <div className="flex h-full flex-col">
-        <div className="flex h-14 items-center border-b px-4">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Logo size="default" />
-            <span className="text-lg font-bold">CypheirPay</span>
-          </Link>
-        </div>
+    <Sidebar collapsible="icon" side="left">
+      <SidebarContent className="pt-16">
         <ScrollArea className="flex-1 py-4">
-          <nav className="grid gap-2 px-2">
+          <SidebarMenu>
             {routes.map(
               (route) =>
-                (!route.requiresAuth || user) && (
-                  <Button
-                    key={route.href}
-                    variant={pathname === route.href ? "default" : "ghost"}
-                    className={cn(
-                      "justify-start gap-2",
-                      pathname === route.href &&
-                        "bg-primary text-primary-foreground hover:bg-primary/90"
-                    )}
-                    asChild
-                  >
-                    <Link href={route.href}>
-                      {route.icon}
-                      {route.title}
-                    </Link>
-                  </Button>
+                (!route.requiresAuth || session) && (
+                  <SidebarMenuItem key={route.href}>
+                    <SidebarMenuButton
+                      asChild
+                      variant={"default"}
+                      className={cn(
+                        "w-full justify-start",
+                        pathname === route.href &&
+                          "bg-primary text-primary-foreground hover:bg-primary/90"
+                      )}
+                    >
+                      <Link href={route.href}>
+                        {route.icon}
+                        {route.title}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 )
             )}
-          </nav>
+          </SidebarMenu>
         </ScrollArea>
-        <div className="mt-auto border-t p-4">
-          {user ? (
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => signOut()}
-            >
+      </SidebarContent>
+      {/* <SidebarFooter className="border-t p-4">
+        {session ? (
+          <SidebarMenuButton
+            variant="outline"
+            className="w-full justify-start gap-2"
+            onClick={() => signOut()}
+          >
+            <LogOut className="h-5 w-5" />
+            Logout
+          </SidebarMenuButton>
+        ) : (
+          <SidebarMenuButton
+            variant="outline"
+            className="w-full justify-start gap-2"
+            asChild
+          >
+            <Link href="/login">
               <LogOut className="h-5 w-5" />
-              Logout
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              asChild
-            >
-              <Link href="/login">
-                <LogOut className="h-5 w-5" />
-                Login
-              </Link>
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
+              Login
+            </Link>
+          </SidebarMenuButton>
+        )}
+      </SidebarFooter> */}
+    </Sidebar>
   );
 }
